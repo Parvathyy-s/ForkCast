@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: backend
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/forkcast
+    username: root
+    password: Gowri2010
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
