@@ -16,20 +16,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/users/register",
-                                "/api/users/login"
-                        ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .formLogin(form -> form.disable());
+    http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                        "/api/users/register",
+                        "/api/users/login",
+                        "/api/recipes/**",
+                        "/api/recommend/**"
+                    ).permitAll()
+                    .anyRequest().authenticated()
+            )
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(form -> form.disable());
 
-        return http.build();
-    }
+    return http.build();
+}
 }
