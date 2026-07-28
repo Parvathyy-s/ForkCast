@@ -20,10 +20,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             MealType mealType
     );
 
-    List<Recipe> findByDietTypeAndMealTypeAndCaloriesLessThanEqualAndPrepTimeLessThanEqual(
-            DietType dietType,
-            MealType mealType,
-            Integer calories,
-            Integer prepTime
-    );
+    List<Recipe> findByCuisineIgnoreCase(String cuisine);
+
+    List<Recipe> findByHealthGoalsContainingIgnoreCase(String healthGoal);
 }
