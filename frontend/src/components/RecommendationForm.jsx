@@ -28,11 +28,6 @@ function RecommendationForm({ onSubmit, loading }) {
       return;
     }
 
-    if (!formData.mealType) {
-      alert("Please select a Meal Type.");
-      return;
-    }
-
     const request = {};
 
     Object.entries(formData).forEach(([key, value]) => {
