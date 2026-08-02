@@ -16,49 +16,68 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
 
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.findAll();
+    }
+
     public List<Recipe> findMatchingRecipes(RecommendationRequest request) {
 
-        List<Recipe> recipes = recipeRepository
-                .findByDietTypeAndMealType(
-                        request.getDietType(),
-                        request.getMealType()
-                );
+        System.out.println("========================================");
+        System.out.println("Incoming Request");
+        System.out.println("Diet       : " + request.getDietType());
+        System.out.println("Meal       : " + request.getMealType());
+        System.out.println("Calories   : " + request.getMaxCalories());
+        System.out.println("Prep Time  : " + request.getMaxPrepTime());
+        System.out.println("Cuisine    : '" + request.getCuisine() + "'");
+        System.out.println("HealthGoal : '" + request.getHealthGoal() + "'");
+        System.out.println("Allergy    : '" + request.getAllergy() + "'");
+        System.out.println("========================================");
+
+       List<Recipe> recipes = recipeRepository.findAll()
+        .stream()
+        .filter(recipe ->
+                recipe.getDietType() == request.getDietType())
+        .toList();
+
+        System.out.println("After Diet + Meal = " + recipes.size());
 
         recipes = recipes.stream()
                 .filter(recipe -> recipe.getCalories() <= request.getMaxCalories())
                 .collect(Collectors.toList());
 
+        System.out.println("After Calories = " + recipes.size());
+
         recipes = recipes.stream()
                 .filter(recipe -> recipe.getPrepTime() <= request.getMaxPrepTime())
                 .collect(Collectors.toList());
 
-        if (request.getCuisine() != null && !request.getCuisine().isBlank()) {
-            recipes = recipes.stream()
-                    .filter(recipe -> recipe.getCuisine().equalsIgnoreCase(request.getCuisine()))
-                    .collect(Collectors.toList());
-        }
-
-        if (request.getHealthGoal() != null && !request.getHealthGoal().isBlank()) {
-            recipes = recipes.stream()
-                    .filter(recipe ->
-                            recipe.getHealthGoals() != null &&
-                            recipe.getHealthGoals().toLowerCase()
-                                    .contains(request.getHealthGoal().toLowerCase()))
-                    .collect(Collectors.toList());
-        }
+        System.out.println("After Prep Time = " + recipes.size());
 
         if (request.getAllergy() != null && !request.getAllergy().isBlank()) {
+
             recipes = recipes.stream()
                     .filter(recipe ->
                             recipe.getAllergies() == null ||
-                            !recipe.getAllergies().toLowerCase()
+                            !recipe.getAllergies()
+                                    .toLowerCase()
                                     .contains(request.getAllergy().toLowerCase()))
                     .collect(Collectors.toList());
+
+            System.out.println("After Allergy = " + recipes.size());
         }
 
         recipes.sort(
                 Comparator.comparing(Recipe::getProtein).reversed()
         );
+
+        System.out.println("========================================");
+        System.out.println("FINAL MATCHES = " + recipes.size());
+
+        for (Recipe recipe : recipes) {
+            System.out.println(recipe.getName());
+        }
+
+        System.out.println("========================================");
 
         return recipes;
     }

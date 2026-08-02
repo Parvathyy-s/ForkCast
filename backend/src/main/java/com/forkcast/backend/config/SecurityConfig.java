@@ -25,9 +25,10 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                         "/api/users/register",
                         "/api/users/login",
                         "/api/recipes/**",
-                        "/api/recommend/**"
+                        "/api/recommend/**",
+                        "/api/test-gemini"
                     ).permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             )
             .httpBasic(httpBasic -> httpBasic.disable())
             .formLogin(form -> form.disable());
